@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #fafafa;
+    --fg: #0a0a0a;
+    --muted: #7a7a7a;
+    --line: #e5e5e5;
+    --card: #ffffff;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0a0a0a;
+    --fg: #fafafa;
+    --muted: #888888;
+    --line: #1e1e1e;
+    --card: #111111;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, "Segoe UI", "Inter", system-ui, sans-serif;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s, color 0.3s;
+  }
+}
+
+.post-body p { margin-bottom: 20px; line-height: 1.85; }
+.post-body h2 {
+  margin-top: 36px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+}
+.post-body h3 {
+  margin-top: 28px;
+  margin-bottom: 10px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.post-body ul { margin-bottom: 20px; list-style: none; }
+.post-body li {
+  padding: 5px 0 5px 22px;
+  position: relative;
+}
+.post-body li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+}
+.post-body code:not(pre code) {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: "SF Mono", Consolas, monospace;
+}
+.post-body blockquote {
+  border-left: 2px solid var(--fg);
+  padding-left: 20px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--muted);
+}
+.post-body a {
+  color: var(--fg);
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+.post-body pre {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.post-body img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 24px 0;
+}
+
+.post-card {
+  transition: border-color 0.2s, transform 0.2s;
+}
+.post-card:hover {
+  border-color: var(--fg) !important;
+  transform: translateY(-1px);
+}
+.post-card:hover .post-arrow {
+  color: var(--fg);
+}

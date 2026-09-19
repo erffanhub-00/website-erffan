@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Contact" active="contact">
+  <section class="mb-12 pb-12 border-b" style="border-color: var(--line);">
+    <h1 class="text-[30px] font-bold tracking-tight mb-3">Contact</h1>
+    <p class="text-[15px] m-0" style="color: var(--muted);">
+      Say hi. Ask questions. Challenge me.
+    </p>
+  </section>
+
+  <section>
+    <h2 class="text-xs uppercase tracking-widest mb-5" style="color: var(--muted);">
+      Reach me
+    </h2>
+    <div class="flex flex-wrap gap-5 text-sm">
+      <a href="mailto:erffanhub@gmail.com" class="no-underline" style="color: var(--muted);">Email</a>
+      <a href="https://github.com/erffanhub-00" target="_blank" rel="noopener"
+         class="no-underline" style="color: var(--muted);">GitHub</a>
+      <a href="https://gist.github.com/erffanhub-00" target="_blank" rel="noopener"
+         class="no-underline" style="color: var(--muted);">Gist</a>
+      <a href="https://x.com/Erffanhub_00" target="_blank" rel="noopener"
+         class="no-underline" style="color: var(--muted);">X</a>
+      <a href="https://t.me/erffan_hub" target="_blank" rel="noopener"
+         class="no-underline" style="color: var(--muted);">Telegram</a>
+      <a href="/rss.xml" class="no-underline" style="color: var(--muted);">RSS</a>
+    </div>
+  </section>
+</BaseLayout>

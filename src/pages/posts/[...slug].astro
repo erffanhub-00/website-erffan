@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formatDate = (date) =>
+  date.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} active="work">
+  <a
+    href="/work"
+    class="inline-flex items-center gap-1.5 text-[13px] no-underline mb-8"
+    style="color: var(--muted);"
+  >
+    ← Back to Work
+  </a>
+
+  <article>
+    <header class="mb-10 pb-8 border-b" style="border-color: var(--line);">
+      <div class="text-[13px] mb-4" style="color: var(--muted);">
+        {formatDate(post.data.date)} · {post.data.category}
+        {post.data.readingTime && ` · ${post.data.readingTime} min read`}
+      </div>
+      <h1 class="text-[30px] font-bold tracking-tight m-0 mb-4">
+        {post.data.title}
+      </h1>
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2">
+          {post.data.tags.map((tag) => (
+            <span class="text-[11px] px-2 py-1 rounded-full"
+                  style="background: var(--card); border: 1px solid var(--line); color: var(--muted);">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    {post.data.image && (
+      <img src={post.data.image} alt={post.data.title}
+           class="w-full rounded-lg mb-10" style="border: 1px solid var(--line);" />
+    )}
+
+    <div class="post-body">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

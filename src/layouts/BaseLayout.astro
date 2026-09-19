@@ -1,0 +1,110 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  active?: string;
+}
+
+const {
+  title,
+  description = 'Learner, builder, and in love with breaking things to understand them.',
+  active = '',
+} = Astro.props;
+
+const siteUrl = Astro.site?.toString() || '';
+const canonical = new URL(Astro.url.pathname, siteUrl).toString();
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} — erffanhub-00</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={`${title} — erffanhub-00`} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="alternate" type="application/rss+xml" title="erffanhub-00" href="/rss.xml" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <script is:inline>
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+  </script>
+</head>
+<body class="min-h-screen flex flex-col">
+
+<header
+  class="sticky top-0 z-50 border-b"
+  style="border-color: var(--line); background: var(--bg); backdrop-filter: blur(12px);"
+>
+  <div class="max-w-[680px] mx-auto px-6 py-[18px] flex justify-between items-center gap-5">
+    <a href="/" class="font-semibold text-[15px] no-underline" style="color: var(--fg);">
+      erffanhub<span style="color: var(--muted); font-weight: 400;">-00</span>
+    </a>
+
+    <nav class="flex gap-6 text-[13.5px]">
+      <a href="/" class="no-underline transition-colors"
+         style={`color: var(--${active === 'about' ? 'fg' : 'muted'});`}>About</a>
+      <a href="/work" class="no-underline transition-colors"
+         style={`color: var(--${active === 'work' ? 'fg' : 'muted'});`}>Work</a>
+      <a href="/contact" class="no-underline transition-colors"
+         style={`color: var(--${active === 'contact' ? 'fg' : 'muted'});`}>Contact</a>
+    </nav>
+
+    <button
+      id="themeToggle"
+      class="w-8 h-8 rounded-full border cursor-pointer flex items-center justify-center"
+      style="border-color: var(--line); color: var(--fg); background: none;"
+      aria-label="Toggle theme"
+    >
+      ◐
+    </button>
+  </div>
+</header>
+
+<main class="flex-1 max-w-[680px] w-full mx-auto px-6 py-16">
+  <slot />
+</main>
+
+<footer class="border-t" style="border-color: var(--line);">
+  <div
+    class="max-w-[680px] mx-auto px-6 py-6 flex justify-between items-center flex-wrap gap-4 text-[13px]"
+    style="color: var(--muted);"
+  >
+    <span>© 2026 erffanhub-00</span>
+    <div class="flex gap-[18px] flex-wrap">
+      <a href="https://github.com/erffanhub-00" target="_blank" rel="noopener"
+         class="no-underline" style="color: var(--muted);">GitHub</a>
+      <a href="https://gist.github.com/erffanhub-00" target="_blank" rel="noopener"
+         class="no-underline" style="color: var(--muted);">Gist</a>
+      <a href="https://x.com/Erffanhub_00" target="_blank" rel="noopener"
+         class="no-underline" style="color: var(--muted);">X</a>
+      <a href="https://t.me/erffan_hub" target="_blank" rel="noopener"
+         class="no-underline" style="color: var(--muted);">Telegram</a>
+      <a href="mailto:erffanhub@gmail.com" class="no-underline" style="color: var(--muted);">Email</a>
+      <a href="/rss.xml" class="no-underline" style="color: var(--muted);">RSS</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+</script>
+
+</body>
+</html>
