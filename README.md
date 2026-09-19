@@ -1,5 +1,7 @@
 # Erffan — Personal Website & Blog
 
+> **Live Website:** [website-erffan.erffanhub.workers.dev](https://website-erffan.erffanhub.workers.dev/)
+
 A minimalist personal website and blog with an **E-paper black & white aesthetic**, built with **Astro 5** and designed around speed, readability, and simplicity.
 
 The site is primarily English-first while supporting **Persian (RTL)** content.
@@ -156,7 +158,7 @@ Then write the article using normal Markdown.
 
 ## ✦ Deployment
 
-The website is deployed using **Cloudflare Pages**.
+The website is deployed using **Cloudflare**.
 
 ### Build settings
 
