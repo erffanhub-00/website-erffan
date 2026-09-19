@@ -9,14 +9,18 @@
     --muted: #7a7a7a;
     --line: #e5e5e5;
     --card: #ffffff;
+    --code-bg: #f4f4f5;
+    --accent: #0066ff;
   }
 
   [data-theme="dark"] {
     --bg: #0a0a0a;
     --fg: #fafafa;
     --muted: #888888;
-    --line: #1e1e1e;
-    --card: #111111;
+    --line: #262626;
+    --card: #141414;
+    --code-bg: #1a1a1a;
+    --accent: #4d94ff;
   }
 
   body {
@@ -29,75 +33,345 @@
   }
 }
 
-.post-body p { margin-bottom: 20px; line-height: 1.85; }
-.post-body h2 {
-  margin-top: 36px;
-  margin-bottom: 16px;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--muted);
-}
-.post-body h3 {
-  margin-top: 28px;
-  margin-bottom: 10px;
-  font-size: 17px;
-  font-weight: 600;
-}
-.post-body ul { margin-bottom: 20px; list-style: none; }
-.post-body li {
-  padding: 5px 0 5px 22px;
-  position: relative;
-}
-.post-body li::before {
-  content: "—";
-  position: absolute;
-  left: 0;
-  color: var(--muted);
-}
-.post-body code:not(pre code) {
-  background: var(--card);
-  border: 1px solid var(--line);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: "SF Mono", Consolas, monospace;
-}
-.post-body blockquote {
-  border-left: 2px solid var(--fg);
-  padding-left: 20px;
-  margin: 24px 0;
-  font-style: italic;
-  color: var(--muted);
-}
-.post-body a {
-  color: var(--fg);
-  border-bottom: 1px solid var(--line);
-  text-decoration: none;
-}
-.post-body pre {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 20px;
-  overflow-x: auto;
-  margin-bottom: 20px;
-  font-size: 13.5px;
-  line-height: 1.6;
-}
-.post-body img {
-  max-width: 100%;
-  border-radius: 8px;
-  margin: 24px 0;
+/* ============ Article body ============ */
+.post-body {
+  font-size: 16.5px;
+  line-height: 1.85;
 }
 
-.post-card {
-  transition: border-color 0.2s, transform 0.2s;
+.post-body > * + * {
+  margin-top: 24px;
 }
+
+.post-body p {
+  margin-bottom: 24px;
+}
+
+/* ============ Headings ============ */
+.post-body h2 {
+  margin-top: 56px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  border-bottom: 2px solid var(--line);
+  text-transform: none;
+  color: var(--fg);
+}
+
+.post-body h3 {
+  margin-top: 40px;
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.post-body h4 {
+  margin-top: 28px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* ============ Lists ============ */
+.post-body ul {
+  margin-bottom: 24px;
+  list-style: none;
+  padding: 0;
+}
+
+.post-body ul li {
+  padding: 6px 0 6px 26px;
+  position: relative;
+}
+
+.post-body ul li::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 16px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fg);
+}
+
+.post-body ol {
+  margin-bottom: 24px;
+  padding-left: 26px;
+  list-style: decimal;
+}
+
+.post-body ol li {
+  padding: 6px 0;
+}
+
+.post-body ol li::marker {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* ============ Blockquote ============ */
+.post-body blockquote {
+  border-left: 3px solid var(--fg);
+  padding: 16px 24px;
+  margin: 32px 0;
+  background: var(--card);
+  border-radius: 0 8px 8px 0;
+  font-style: normal;
+  color: var(--fg);
+}
+
+.post-body blockquote p {
+  margin: 0;
+}
+
+/* ============ Links ============ */
+.post-body a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.post-body a:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* ============ Inline code ============ */
+.post-body code:not(pre code) {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-size: 0.9em;
+  font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+  color: var(--fg);
+}
+
+/* ============ Code blocks ============ */
+.post-body pre {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px 24px;
+  overflow-x: auto;
+  margin: 28px 0;
+  font-size: 14px;
+  line-height: 1.65;
+  position: relative;
+}
+
+.post-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+}
+
+/* ============ Tables ============ */
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 28px 0;
+  font-size: 15px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.post-body thead {
+  background: var(--card);
+}
+
+.post-body th {
+  padding: 14px 18px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  border-bottom: 2px solid var(--line);
+}
+
+.post-body td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.post-body tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.post-body tbody tr:hover {
+  background: var(--card);
+}
+
+/* ============ Horizontal rule ============ */
+.post-body hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 48px 0;
+}
+
+/* ============ Images ============ */
+.post-body img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin: 28px 0;
+  border: 1px solid var(--line);
+}
+
+/* ============ Strong / em ============ */
+.post-body strong {
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.post-body em {
+  font-style: italic;
+  color: var(--fg);
+}
+
+/* ============ Post cards ============ */
+.post-card {
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
 .post-card:hover {
   border-color: var(--fg) !important;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
+
+[data-theme="dark"] .post-card:hover {
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.04);
+}
+
 .post-card:hover .post-arrow {
+  color: var(--fg);
+  transform: translateX(2px);
+}
+
+/* ============ RTL support ============ */
+.post-body,
+.post-body p,
+.post-body li,
+.post-body blockquote,
+.post-body h2,
+.post-body h3,
+.post-body h4 {
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+
+.post-body ul {
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+}
+
+.post-body ul li {
+  padding-inline-start: 26px;
+  padding-inline-end: 0;
+  padding-left: 0;
+}
+
+.post-body ul li::before {
+  inset-inline-start: 8px;
+  left: auto;
+}
+
+.post-body blockquote {
+  border-inline-start: 3px solid var(--fg);
+  border-left: none;
+  padding-inline-start: 24px;
+  padding-left: 0;
+  border-radius: 0;
+}
+
+.post-body th {
+  text-align: start;
+}
+
+/* ============ Copy button ============ */
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: var(--bg);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0;
+  letter-spacing: 0.3px;
+}
+
+.post-body pre:hover + .copy-btn,
+.copy-btn:hover {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  border-color: var(--fg);
+  color: var(--fg);
+}
+
+.copy-btn.copied {
+  color: #10b981;
+  border-color: #10b981;
+}
+
+/* ============ Scroll rows for filters ============ */
+.scroll-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  min-width: 0;
+  cursor: grab;
+}
+
+.scroll-row:active {
+  cursor: grabbing;
+}
+
+.scroll-row::-webkit-scrollbar {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+.scroll-pill {
+  flex: 0 0 auto;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-family: inherit;
+  cursor: pointer;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  transition: all 0.15s;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+.scroll-pill:hover {
+  border-color: var(--fg);
   color: var(--fg);
 }

@@ -11,7 +11,7 @@ const postsData = allPosts.map((post) => ({
   title: post.data.title,
   description: post.data.description,
   category: post.data.category,
-  tags: post.data.tags,
+  tags: post.data.tags || [],
   dateLabel: post.data.date.toLocaleDateString('en-US', {
     month: 'short',
     year: 'numeric',
@@ -20,6 +20,7 @@ const postsData = allPosts.map((post) => ({
 }));
 
 const categories = [...new Set(allPosts.map((p) => p.data.category))].sort();
+const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))].sort();
 ---
 
 <BaseLayout title="Work" active="work">
@@ -30,34 +31,49 @@ const categories = [...new Set(allPosts.map((p) => p.data.category))].sort();
     </p>
   </section>
 
-  <section class="mb-10">
-    <div class="flex flex-col gap-4">
-      <input
-        id="searchInput"
-        type="search"
-        placeholder="Search posts..."
-        class="w-full px-4 py-3 rounded-lg text-[14px] outline-none"
-        style="background: var(--card); border: 1px solid var(--line); color: var(--fg);"
-      />
+  <section class="mb-8">
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="Search posts..."
+      class="w-full px-4 py-3 rounded-lg text-[14px] outline-none mb-4"
+      style="background: var(--card); border: 1px solid var(--line); color: var(--fg);"
+    />
 
-      <div class="flex flex-wrap gap-2" id="categoryFilter">
+    <div class="scroll-row mb-2" id="categoryFilter">
+      <button
+        data-category=""
+        class="category-btn scroll-pill"
+        style="background: var(--fg); color: var(--bg); border-color: var(--fg);"
+      >
+        All
+      </button>
+      {categories.map((cat) => (
         <button
-          data-category=""
-          class="category-btn px-3 py-1.5 rounded-full text-[12px] cursor-pointer"
-          style="background: var(--fg); color: var(--bg); border: 1px solid var(--fg);"
+          data-category={cat}
+          class="category-btn scroll-pill"
         >
-          All
+          {cat}
         </button>
-        {categories.map((cat) => (
-          <button
-            data-category={cat}
-            class="category-btn px-3 py-1.5 rounded-full text-[12px] cursor-pointer"
-            style="background: transparent; color: var(--muted); border: 1px solid var(--line);"
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+      ))}
+    </div>
+
+    <div class="scroll-row" id="tagFilter">
+      <button
+        data-tag=""
+        class="tag-btn scroll-pill"
+        style="background: var(--fg); color: var(--bg); border-color: var(--fg);"
+      >
+        All tags
+      </button>
+      {allTags.map((tag) => (
+        <button
+          data-tag={tag}
+          class="tag-btn scroll-pill"
+        >
+          #{tag}
+        </button>
+      ))}
     </div>
   </section>
 
@@ -72,22 +88,45 @@ const categories = [...new Set(allPosts.map((p) => p.data.category))].sort();
     const posts = postsData;
     const searchInput = document.getElementById('searchInput');
     const categoryBtns = document.querySelectorAll('.category-btn');
+    const tagBtns = document.querySelectorAll('.tag-btn');
     const postsList = document.getElementById('postsList');
     const noResults = document.getElementById('noResults');
 
     let activeCategory = '';
+    let activeTag = '';
     let query = '';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlTag = urlParams.get('tag');
+    if (urlTag) {
+      activeTag = urlTag;
+    }
+
+    function applyActiveStyles(btns, activeValue, dataAttr) {
+      btns.forEach((b) => {
+        if (b.dataset[dataAttr] === activeValue) {
+          b.style.background = 'var(--fg)';
+          b.style.color = 'var(--bg)';
+          b.style.borderColor = 'var(--fg)';
+        } else {
+          b.style.background = 'transparent';
+          b.style.color = 'var(--muted)';
+          b.style.borderColor = 'var(--line)';
+        }
+      });
+    }
 
     function render() {
       const filtered = posts.filter((p) => {
         const matchesCategory = !activeCategory || p.category === activeCategory;
+        const matchesTag = !activeTag || (p.tags && p.tags.includes(activeTag));
         const q = query.toLowerCase().trim();
         const matchesQuery = !q ||
           p.title.toLowerCase().includes(q) ||
           p.description.toLowerCase().includes(q) ||
           p.category.toLowerCase().includes(q) ||
           (p.tags && p.tags.some((t) => t.toLowerCase().includes(q)));
-        return matchesCategory && matchesQuery;
+        return matchesCategory && matchesTag && matchesQuery;
       });
 
       if (filtered.length === 0) {
@@ -107,6 +146,11 @@ const categories = [...new Set(allPosts.map((p) => p.data.category))].sort();
           <p class="text-sm leading-relaxed m-0" style="color: var(--muted);">
             ${p.description}
           </p>
+          ${p.tags && p.tags.length ? `
+            <div class="flex flex-wrap gap-1.5 mt-3">
+              ${p.tags.map(t => `<span class="text-[10px] px-2 py-0.5 rounded-full" style="background: var(--bg); border: 1px solid var(--line); color: var(--muted);">#${t}</span>`).join('')}
+            </div>
+          ` : ''}
           <span class="post-arrow absolute right-5 top-1/2 -translate-y-1/2 text-lg" style="color: var(--muted);">→</span>
         </a>
       `).join('');
@@ -117,21 +161,53 @@ const categories = [...new Set(allPosts.map((p) => p.data.category))].sort();
     categoryBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
         activeCategory = btn.dataset.category;
-        categoryBtns.forEach((b) => {
-          if (b === btn) {
-            b.style.background = 'var(--fg)';
-            b.style.color = 'var(--bg)';
-            b.style.borderColor = 'var(--fg)';
-          } else {
-            b.style.background = 'transparent';
-            b.style.color = 'var(--muted)';
-            b.style.borderColor = 'var(--line)';
-          }
-        });
+        applyActiveStyles(categoryBtns, activeCategory, 'category');
         render();
       });
     });
 
+    tagBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeTag = btn.dataset.tag;
+        applyActiveStyles(tagBtns, activeTag, 'tag');
+        render();
+      });
+    });
+
+    applyActiveStyles(categoryBtns, activeCategory, 'category');
+    applyActiveStyles(tagBtns, activeTag, 'tag');
     render();
+
+    // Drag to scroll for .scroll-row
+    document.querySelectorAll('.scroll-row').forEach((row) => {
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      row.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - row.offsetLeft;
+        scrollLeft = row.scrollLeft;
+      });
+
+      row.addEventListener('mouseleave', () => { isDown = false; });
+      row.addEventListener('mouseup', () => { isDown = false; });
+
+      row.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - row.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        row.scrollLeft = scrollLeft - walk;
+      });
+
+      // Wheel horizontal scroll
+      row.addEventListener('wheel', (e) => {
+        if (e.deltaY !== 0) {
+          e.preventDefault();
+          row.scrollLeft += e.deltaY;
+        }
+      }, { passive: false });
+    });
   </script>
 </BaseLayout>

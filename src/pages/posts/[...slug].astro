@@ -30,7 +30,7 @@ const formatDate = (date) =>
     ← Back to Work
   </a>
 
-  <article>
+  <article dir="auto">
     <header class="mb-10 pb-8 border-b" style="border-color: var(--line);">
       <div class="text-[13px] mb-4" style="color: var(--muted);">
         {formatDate(post.data.date)} · {post.data.category}
@@ -42,10 +42,13 @@ const formatDate = (date) =>
       {post.data.tags && post.data.tags.length > 0 && (
         <div class="flex flex-wrap gap-2">
           {post.data.tags.map((tag) => (
-            <span class="text-[11px] px-2 py-1 rounded-full"
-                  style="background: var(--card); border: 1px solid var(--line); color: var(--muted);">
+            <a
+              href={`/work?tag=${encodeURIComponent(tag)}`}
+              class="text-[11px] px-2 py-1 rounded-full no-underline transition-colors"
+              style="background: var(--card); border: 1px solid var(--line); color: var(--muted);"
+            >
               #{tag}
-            </span>
+            </a>
           ))}
         </div>
       )}
