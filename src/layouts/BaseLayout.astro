@@ -98,6 +98,7 @@ const canonical = new URL(Astro.url.pathname, siteUrl).toString();
 </footer>
 
 <script>
+  // === Theme toggle ===
   document.getElementById('themeToggle')?.addEventListener('click', () => {
     const html = document.documentElement;
     const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -105,6 +106,7 @@ const canonical = new URL(Astro.url.pathname, siteUrl).toString();
     localStorage.setItem('theme', next);
   });
 
+  // === Copy button for code blocks ===
   document.querySelectorAll('.post-body pre').forEach((pre) => {
     const code = pre.querySelector('code');
     if (!code) return;

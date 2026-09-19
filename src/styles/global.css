@@ -33,6 +33,29 @@
   }
 }
 
+/* ============ Typing animation ============ */
+.type-target {
+  white-space: pre;
+}
+
+.type-target .dim {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.type-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  animation: typeBlink 1s step-end infinite;
+  color: var(--fg);
+  font-weight: 400;
+}
+
+@keyframes typeBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* ============ Article body ============ */
 .post-body {
   font-size: 16.5px;

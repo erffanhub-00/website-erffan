@@ -4,7 +4,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout title="erffanhub-00" active="about">
   <section class="mb-12 pb-12 border-b" style="border-color: var(--line);">
-    <h1 class="text-[30px] font-bold tracking-tight mb-3">erffanhub-00</h1>
+    <h1 class="text-[30px] font-bold tracking-tight mb-3">
+      <span class="type-target"></span><span class="type-cursor">▌</span>
+    </h1>
     <p class="text-[15px] m-0" style="color: var(--muted);">
       Learner, builder, and in love with breaking things to understand them.
     </p>
@@ -34,4 +36,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       is my keyboard.
     </p>
   </section>
+
+  <script>
+    (function () {
+      const el = document.querySelector('.type-target');
+      if (!el) return;
+
+      const base = 'erffanhub';
+      const suffix = '-00';
+      let i = 0;
+
+      function typeChar() {
+        if (i < base.length) {
+          el.textContent = base.slice(0, i + 1);
+          i++;
+          setTimeout(typeChar, 110);
+        } else {
+          setTimeout(() => {
+            el.innerHTML = base + '<span class="dim">' + suffix + '</span>';
+          }, 200);
+        }
+      }
+
+      el.textContent = '';
+      setTimeout(typeChar, 300);
+    })();
+  </script>
 </BaseLayout>
