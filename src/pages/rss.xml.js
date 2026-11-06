@@ -16,7 +16,7 @@ export async function GET(context) {
       description: post.data.description,
       link: `/posts/${post.id}/`,
       categories: [post.data.category, ...(post.data.tags || [])],
+      customData: `<language>${post.data.lang === 'fa' ? 'fa-ir' : 'en-us'}</language>`,
     })),
-    customData: `<language>en-us</language>`,
   });
 }

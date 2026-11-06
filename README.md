@@ -18,7 +18,7 @@ The site is primarily English-first while supporting **Persian (RTL)** content.
 * Syntax highlighting with Shiki
 * RSS feed
 * Custom 404 page
-* Automatic RTL support for Persian content
+* RTL support for Persian posts
 * Responsive design
 * SEO meta tags
 * Open Graph and Twitter Cards
@@ -36,19 +36,22 @@ The site is primarily English-first while supporting **Persian (RTL)** content.
 | Content Collections                      | Content management    |
 | [Shiki](https://shiki.style/)            | Syntax highlighting   |
 | `@astrojs/rss`                           | RSS feed              |
-| Cloudflare Pages                         | Deployment            |
+| Cloudflare Workers                     | Deployment            |
 
 ## ✦ Project Structure
 
 ```text
 website-erffan/
 ├── astro.config.mjs
+├── wrangler.toml
 ├── tailwind.config.mjs
 ├── package.json
 ├── tsconfig.json
 ├── .gitignore
 ├── public/
-│   └── favicon.svg
+│   ├── favicon.svg
+│   ├── og.png
+│   └── robots.txt
 └── src/
     ├── content.config.ts
     ├── content/
@@ -147,6 +150,7 @@ title: "Network Debugging"
 date: 2026-09-20
 category: Networks
 tags: ["networking", "debugging"]
+lang: "en"
 description: "A short description of the article."
 readingTime: 5
 ---
@@ -158,7 +162,7 @@ Then write the article using normal Markdown.
 
 ## ✦ Deployment
 
-The website is deployed using **Cloudflare**.
+The website is deployed as a static site on **Cloudflare Workers** (see `wrangler.toml`).
 
 ### Build settings
 
@@ -166,6 +170,13 @@ The website is deployed using **Cloudflare**.
 Build command: npm run build
 Build output directory: dist
 Node version: 20
+```
+
+Deploy from the command line:
+
+```bash
+npm run build
+npx wrangler deploy
 ```
 
 The project can be configured to automatically deploy whenever changes are pushed to the `main` branch.

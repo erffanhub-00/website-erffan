@@ -4,10 +4,11 @@ title: "VPN چیست و واقعاً چگونه کار می‌کند؟"
 date: 2026-09-27
 category: Networks
 tags: ["vpn", "networking", "internet", "privacy", "security"]
+lang: fa
 description: "یک توضیح ساده و کاربردی درباره اینکه VPN چیست، چه اتفاقی برای ترافیک اینترنت می‌افتد و چرا VPN می‌تواند IP شما را تغییر دهد."
-readingTime: 6
+readingTime: 8
 draft: false
-------------
+---
 
 وقتی بدون VPN وارد یک سایت می‌شوید، ارتباط شما تقریباً به این شکل است:
 

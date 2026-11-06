@@ -5,20 +5,24 @@ interface Props {
   title: string;
   description?: string;
   active?: string;
+  lang?: 'en' | 'fa';
 }
 
 const {
   title,
   description = 'Learner, builder, and in love with breaking things to understand them.',
   active = '',
+  lang = 'en',
 } = Astro.props;
 
+const dir = lang === 'fa' ? 'rtl' : 'ltr';
 const siteUrl = Astro.site?.toString() || '';
 const canonical = new URL(Astro.url.pathname, siteUrl).toString();
+const ogImage = new URL('/og.png', siteUrl).toString();
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang={lang} dir={dir} data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,15 +34,31 @@ const canonical = new URL(Astro.url.pathname, siteUrl).toString();
   <meta property="og:title" content={`${title} — erffanhub-00`} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={`${title} — erffanhub-00`} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
 
   <link rel="alternate" type="application/rss+xml" title="erffanhub-00" href="/rss.xml" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  {lang === 'fa' && (
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  )}
 
   <script is:inline>
-    const saved = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+    try {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+    } catch {
+      // storage unavailable; keep the default light theme
+    }
   </script>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -53,11 +73,11 @@ const canonical = new URL(Astro.url.pathname, siteUrl).toString();
     </a>
 
     <nav class="flex gap-6 text-[13.5px]">
-      <a href="/" class="no-underline transition-colors"
+      <a href="/" class="no-underline transition-colors" aria-current={active === 'about' ? 'page' : undefined}
          style={`color: var(--${active === 'about' ? 'fg' : 'muted'});`}>About</a>
-      <a href="/work" class="no-underline transition-colors"
+      <a href="/work" class="no-underline transition-colors" aria-current={active === 'work' ? 'page' : undefined}
          style={`color: var(--${active === 'work' ? 'fg' : 'muted'});`}>Work</a>
-      <a href="/contact" class="no-underline transition-colors"
+      <a href="/contact" class="no-underline transition-colors" aria-current={active === 'contact' ? 'page' : undefined}
          style={`color: var(--${active === 'contact' ? 'fg' : 'muted'});`}>Contact</a>
     </nav>
 
@@ -103,7 +123,11 @@ const canonical = new URL(Astro.url.pathname, siteUrl).toString();
     const html = document.documentElement;
     const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      // storage unavailable; theme applies for this page load only
+    }
   });
 
   // === Copy button for code blocks ===

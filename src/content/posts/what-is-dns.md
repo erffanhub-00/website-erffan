@@ -7,7 +7,7 @@ tags: ["dns", "networking", "internet", "debugging"]
 description: "A practical introduction to DNS, how domain names become IP addresses, and how to troubleshoot common DNS problems."
 readingTime: 6
 draft: false
-------------
+---
 
 When you type `google.com` into your browser, your computer needs to find the server's IP address before it can connect to it.
 

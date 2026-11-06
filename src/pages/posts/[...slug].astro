@@ -21,13 +21,13 @@ const formatDate = (date) =>
   });
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description} active="work">
+<BaseLayout title={post.data.title} description={post.data.description} active="work" lang={post.data.lang}>
   <a
     href="/work"
     class="inline-flex items-center gap-1.5 text-[13px] no-underline mb-8"
     style="color: var(--muted);"
   >
-    ← Back to Work
+    {post.data.lang === 'fa' ? '→' : '←'} Back to Work
   </a>
 
   <article dir="auto">

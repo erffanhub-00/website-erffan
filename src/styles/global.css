@@ -6,7 +6,7 @@
   :root {
     --bg: #fafafa;
     --fg: #0a0a0a;
-    --muted: #7a7a7a;
+    --muted: #6e6e6e;
     --line: #e5e5e5;
     --card: #ffffff;
     --code-bg: #f4f4f5;
@@ -26,10 +26,15 @@
   body {
     background: var(--bg);
     color: var(--fg);
-    font-family: -apple-system, "Segoe UI", "Inter", system-ui, sans-serif;
+    font-family: -apple-system, "Segoe UI", "Inter", "Vazirmatn", Tahoma, system-ui, sans-serif;
     line-height: 1.75;
     -webkit-font-smoothing: antialiased;
     transition: background 0.3s, color 0.3s;
+  }
+
+  /* Persian pages: Vazirmatn first, Tahoma as the offline fallback. */
+  html[dir="rtl"] body {
+    font-family: "Vazirmatn", Tahoma, -apple-system, "Segoe UI", system-ui, sans-serif;
   }
 }
 
@@ -176,8 +181,21 @@
 }
 
 /* ============ Code blocks ============ */
+/* Shiki dual theme: colors come from --shiki-* variables, switched by the
+   data-theme toggle (not the OS setting, so it follows the toggle). */
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+[data-theme="dark"] .astro-code,
+[data-theme="dark"] .astro-code span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
 .post-body pre {
-  background: var(--code-bg);
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 20px 24px;
@@ -324,7 +342,7 @@
 .copy-btn {
   position: absolute;
   top: 10px;
-  right: 12px;
+  inset-inline-end: 12px;
   background: var(--bg);
   color: var(--muted);
   border: 1px solid var(--line);

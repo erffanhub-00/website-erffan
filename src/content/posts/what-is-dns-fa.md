@@ -4,10 +4,11 @@ title: "DNS چیست و چگونه کار می‌کند؟"
 date: 2026-09-19
 category: Networks
 tags: ["dns", "networking", "internet", "debugging"]
+lang: fa
 description: "یک معرفی کاربردی از DNS، نحوه تبدیل نام دامنه به آدرس IP و روش عیب‌یابی مشکلات رایج DNS."
 readingTime: 6
 draft: false
-------------
+---
 
 وقتی در مرورگر خود `google.com` را وارد می‌کنی، کامپیوتر قبل از اینکه بتواند به سرور متصل شود باید آدرس IP آن را پیدا کند.
 
