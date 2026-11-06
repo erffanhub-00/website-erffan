@@ -1,11 +1,10 @@
 # website-erffan — Personal Website & Blog
 
+A minimalist personal website and blog with an e-paper black-and-white aesthetic. English-first, with full Persian (RTL) support. Built with Astro 5 and Tailwind CSS, deployed as a static site on Cloudflare Workers. No database, no server, no tracking.
+
 Live: [website-erffan.erffanhub.workers.dev](https://website-erffan.erffanhub.workers.dev/)
 
-A minimalist personal website and blog with an e-paper black-and-white
-aesthetic. English-first, with full Persian (RTL) support for Persian posts.
-Built with Astro 5, styled with Tailwind CSS, deployed as a static site on
-Cloudflare Workers. No database, no server, no tracking.
+[![CI](https://github.com/erffanhub-00/website-erffan/actions/workflows/ci.yml/badge.svg)](https://github.com/erffanhub-00/website-erffan/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Features
 
@@ -33,6 +32,61 @@ Cloudflare Workers. No database, no server, no tracking.
 | `@astrojs/sitemap` | Sitemap generation |
 | [Cloudflare Workers](https://workers.cloudflare.com/) | Static hosting |
 | Markdown | Blog content |
+
+## Quickstart
+
+### Requirements
+
+- Node.js 20+
+- npm
+
+### Install and run
+
+```bash
+git clone https://github.com/erffanhub-00/website-erffan.git
+cd website-erffan
+npm install
+npm run dev
+```
+
+The site runs at <http://localhost:4321>.
+
+## Usage
+
+### Adding a Post
+
+Create a Markdown file in `src/content/posts/`. The filename becomes the
+URL: `src/content/posts/network-debugging.md` is served at
+`/posts/network-debugging`.
+
+Frontmatter:
+
+```markdown
+---
+title: "Network Debugging"
+date: 2026-09-20
+category: Networks
+tags: ["networking", "debugging"]
+lang: "en"
+description: "A short description of the article."
+readingTime: 5
+---
+```
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | Post title |
+| `date` | yes | Publication date (`YYYY-MM-DD`) |
+| `category` | yes | Shown on cards and used as a filter |
+| `description` | yes | Used on cards, in meta tags, and in RSS |
+| `tags` | no | Array of strings, `#tag` links on the post page |
+| `lang` | no | `en` (default) or `fa`; `fa` switches the post to RTL with Vazirmatn |
+| `readingTime` | no | Minutes, roughly words / 200 |
+| `image` | no | Hero image URL, shown above the post body |
+| `draft` | no | `true` hides the post from the site, RSS, and sitemap |
+
+Write the article in normal Markdown. Code blocks get Shiki highlighting
+and a copy button automatically.
 
 ## Project Structure
 
@@ -69,69 +123,6 @@ website-erffan/
     └── utils/
         └── format.ts         # shared date formatting
 ```
-
-## Getting Started
-
-### Requirements
-
-- Node.js 20+
-- npm
-
-### Install and run
-
-```bash
-git clone https://github.com/erffanhub-00/website-erffan.git
-cd website-erffan
-npm install
-npm run dev
-```
-
-The site runs at <http://localhost:4321>.
-
-### Scripts
-
-| Command | What it does |
-| --- | --- |
-| `npm run dev` | Start the dev server |
-| `npm run build` | Production build into `dist/` |
-| `npm run preview` | Serve the production build locally |
-| `npm run check` | Type-check the project (`astro check`) |
-| `npm run astro` | Run the Astro CLI directly |
-
-## Adding a Post
-
-Create a Markdown file in `src/content/posts/`. The filename becomes the
-URL: `src/content/posts/network-debugging.md` is served at
-`/posts/network-debugging`.
-
-Frontmatter:
-
-```markdown
----
-title: "Network Debugging"
-date: 2026-09-20
-category: Networks
-tags: ["networking", "debugging"]
-lang: "en"
-description: "A short description of the article."
-readingTime: 5
----
-```
-
-| Field | Required | Notes |
-| --- | --- | --- |
-| `title` | yes | Post title |
-| `date` | yes | Publication date (`YYYY-MM-DD`) |
-| `category` | yes | Shown on cards and used as a filter |
-| `description` | yes | Used on cards, in meta tags, and in RSS |
-| `tags` | no | Array of strings, `#tag` links on the post page |
-| `lang` | no | `en` (default) or `fa`; `fa` switches the post to RTL with Vazirmatn |
-| `readingTime` | no | Minutes, roughly words / 200 |
-| `image` | no | Hero image URL, shown above the post body |
-| `draft` | no | `true` hides the post from the site, RSS, and sitemap |
-
-Write the article in normal Markdown. Code blocks get Shiki highlighting
-and a copy button automatically.
 
 ## Theming
 
@@ -181,13 +172,18 @@ Node version:    20
 Every push to `main` can then deploy automatically, if that is enabled in
 the dashboard.
 
+## Development
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run check` | Type-check the project (`astro check`) |
+| `npm run astro` | Run the Astro CLI directly |
+
+Run `npm run check` before pushing to catch type errors early.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
-
-## Me
-
-[![Telegram](https://img.shields.io/badge/Telegram-erffan__hub-blue?style=for-the-badge&logo=telegram)](https://t.me/erffan_hub)
-[![X](https://img.shields.io/badge/X-@Erffanhub__00-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/Erffanhub_00)
-[![Gist](https://img.shields.io/badge/Gist-Profile-000000?style=for-the-badge&logo=github)](https://gist.github.com/erffanhub-00)
-[![Github](https://img.shields.io/badge/Github-Profile-000000?style=for-the-badge&logo=github)](https://github.com/erffanhub-00)
