@@ -1,5 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const latestPosts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
 ---
 
 <BaseLayout title="erffanhub-00" active="about">
@@ -27,6 +33,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </p>
   </section>
 
+  <section class="mb-12 pb-12 border-b" style="border-color: var(--line);">
+    <h2 class="text-xs uppercase tracking-widest mb-5" style="color: var(--muted);">
+      Latest posts
+    </h2>
+    <div class="flex flex-col gap-3 mb-5">
+      {latestPosts.map((post) => <PostCard post={post} />)}
+    </div>
+    <a href="/work" class="text-sm no-underline" style="color: var(--muted);">
+      All posts →
+    </a>
+  </section>
+
   <section>
     <h2 class="text-xs uppercase tracking-widest mb-5" style="color: var(--muted);">
       Fun fact
@@ -41,6 +59,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     (function () {
       const el = document.querySelector('.type-target');
       if (!el) return;
+      // Copy to a non-null local: TS drops the narrowing inside closures.
+      const target = el;
+
+      // Reduced motion: keep the static heading as-is, no typing.
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
       const base = 'erffanhub';
       const suffix = '-00';
@@ -48,17 +71,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       function typeChar() {
         if (i < base.length) {
-          el.textContent = base.slice(0, i + 1);
+          target.textContent = base.slice(0, i + 1);
           i++;
           setTimeout(typeChar, 110);
         } else {
           setTimeout(() => {
-            el.innerHTML = base + '<span class="dim">' + suffix + '</span>';
+            target.innerHTML = base + '<span class="dim">' + suffix + '</span>';
           }, 200);
         }
       }
 
-      el.textContent = '';
+      target.textContent = '';
       setTimeout(typeChar, 300);
     })();
   </script>

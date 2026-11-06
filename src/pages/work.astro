@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
@@ -8,9 +9,6 @@ const allPosts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
 
 const categories = [...new Set(allPosts.map((p) => p.data.category))].sort();
 const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))].sort();
-
-const dateLabel = (date: Date) =>
-  date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 ---
 
 <BaseLayout title="Work" active="work">
@@ -21,7 +19,7 @@ const dateLabel = (date: Date) =>
     </p>
   </section>
 
-  <section class="mb-8">
+  <section class="mb-8" aria-label="Filter posts">
     <label for="searchInput" class="sr-only">Search posts</label>
     <input
       id="searchInput"
@@ -31,7 +29,7 @@ const dateLabel = (date: Date) =>
       style="background: var(--card); border: 1px solid var(--line); color: var(--fg);"
     />
 
-    <div class="scroll-row mb-2" id="categoryFilter">
+    <div class="scroll-row mb-2" id="categoryFilter" role="group" aria-label="Filter by category">
       <button
         data-category=""
         class="category-btn scroll-pill"
@@ -51,7 +49,7 @@ const dateLabel = (date: Date) =>
       ))}
     </div>
 
-    <div class="scroll-row" id="tagFilter">
+    <div class="scroll-row" id="tagFilter" role="group" aria-label="Filter by tag">
       <button
         data-tag=""
         class="tag-btn scroll-pill"
@@ -72,38 +70,9 @@ const dateLabel = (date: Date) =>
     </div>
   </section>
 
-  <section>
+  <section aria-label="Posts">
     <div id="postsList" class="flex flex-col gap-3">
-      {allPosts.map((post) => (
-        <a
-          href={`/posts/${post.id}`}
-          class="post-card block relative rounded-lg p-5 pe-12 no-underline"
-          style="background: var(--card); border: 1px solid var(--line); color: var(--fg);"
-          data-category={post.data.category}
-          data-tags={(post.data.tags || []).join(' ')}
-          data-search={[post.data.title, post.data.description, post.data.category, ...(post.data.tags || [])].join(' ').toLowerCase()}
-        >
-          <div class="text-[12px] tracking-wide mb-1.5" style="color: var(--muted);">
-            {dateLabel(post.data.date)} · {post.data.category}
-            {post.data.readingTime ? ` · ${post.data.readingTime} min read` : ''}
-          </div>
-          <h3 class="text-base font-semibold mb-1.5">{post.data.title}</h3>
-          <p class="text-sm leading-relaxed m-0" style="color: var(--muted);">
-            {post.data.description}
-          </p>
-          {post.data.tags && post.data.tags.length ? (
-            <div class="flex flex-wrap gap-1.5 mt-3">
-              {post.data.tags.map((tag) => (
-                <span
-                  class="text-[10px] px-2 py-0.5 rounded-full"
-                  style="background: var(--bg); border: 1px solid var(--line); color: var(--muted);"
-                >#{tag}</span>
-              ))}
-            </div>
-          ) : ''}
-          <span class="post-arrow absolute end-5 top-1/2 -translate-y-1/2 text-lg" style="color: var(--muted);">→</span>
-        </a>
-      ))}
+      {allPosts.map((post) => <PostCard post={post} />)}
     </div>
     <p id="noResults" class="text-center py-8 text-[14px] hidden" style="color: var(--muted);">
       No posts found.

@@ -1,0 +1,34 @@
+---
+// One post card, used by the Work page and the homepage. The data-*
+// attributes are what the Work page search/filter script reads; on the
+// homepage they are inert.
+import type { CollectionEntry } from 'astro:content';
+import { formatShortDate } from '../utils/format';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+---
+
+<a
+  href={`/posts/${post.id}`}
+  class="post-card"
+  data-category={post.data.category}
+  data-tags={(post.data.tags || []).join(' ')}
+  data-search={[post.data.title, post.data.description, post.data.category, ...(post.data.tags || [])].join(' ').toLowerCase()}
+>
+  <div class="post-card-meta">
+    {formatShortDate(post.data.date)} · {post.data.category}
+    {post.data.readingTime ? ` · ${post.data.readingTime} min read` : ''}
+  </div>
+  <h3 class="post-card-title">{post.data.title}</h3>
+  <p class="post-card-desc">{post.data.description}</p>
+  {post.data.tags && post.data.tags.length ? (
+    <div class="post-card-tags">
+      {post.data.tags.map((tag) => <span class="post-card-tag">#{tag}</span>)}
+    </div>
+  ) : ''}
+  <span class="post-arrow" aria-hidden="true">→</span>
+</a>

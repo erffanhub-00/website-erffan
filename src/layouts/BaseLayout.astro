@@ -1,24 +1,52 @@
 ---
 import '../styles/global.css';
+import { siteDescription, siteName, socialLinks } from '../data/site';
 
 interface Props {
   title: string;
   description?: string;
   active?: string;
   lang?: 'en' | 'fa';
+  article?: {
+    published: Date;
+    tags?: string[];
+  };
 }
 
 const {
   title,
-  description = 'Learner, builder, and in love with breaking things to understand them.',
+  description = siteDescription,
   active = '',
   lang = 'en',
+  article,
 } = Astro.props;
 
 const dir = lang === 'fa' ? 'rtl' : 'ltr';
 const siteUrl = Astro.site?.toString() || '';
 const canonical = new URL(Astro.url.pathname, siteUrl).toString();
 const ogImage = new URL('/og.png', siteUrl).toString();
+const ogType = article ? 'article' : 'website';
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteName,
+  url: siteUrl,
+  description: siteDescription,
+};
+
+const articleSchema = article
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title,
+      description,
+      datePublished: article.published.toISOString(),
+      author: { '@type': 'Person', name: 'Erffan', url: siteUrl },
+      mainEntityOfPage: canonical,
+      image: ogImage,
+    }
+  : null;
 ---
 
 <!DOCTYPE html>
@@ -26,21 +54,30 @@ const ogImage = new URL('/og.png', siteUrl).toString();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title} — erffanhub-00</title>
+  <title>{title} — {siteName}</title>
   <meta name="description" content={description} />
+  <meta name="author" content="Erffan" />
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
   <link rel="canonical" href={canonical} />
 
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content={`${title} — erffanhub-00`} />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:locale" content={lang === 'fa' ? 'fa_IR' : 'en_US'} />
+  <meta property="og:site_name" content={siteName} />
+  <meta property="og:title" content={`${title} — ${siteName}`} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
   <meta property="og:image" content={ogImage} />
+  {article && (
+    <meta property="article:published_time" content={article.published.toISOString()} />
+  )}
+  {article?.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={`${title} — erffanhub-00`} />
+  <meta name="twitter:title" content={`${title} — ${siteName}`} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImage} />
 
-  <link rel="alternate" type="application/rss+xml" title="erffanhub-00" href="/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   {lang === 'fa' && (
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -49,6 +86,11 @@ const ogImage = new URL('/og.png', siteUrl).toString();
       href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
+  )}
+
+  <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+  {articleSchema && (
+    <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
   )}
 
   <script is:inline>
@@ -63,6 +105,8 @@ const ogImage = new URL('/og.png', siteUrl).toString();
 </head>
 <body class="min-h-screen flex flex-col">
 
+<a href="#main" class="skip-link">Skip to content</a>
+
 <header
   class="sticky top-0 z-50 border-b"
   style="border-color: var(--line); background: var(--bg); backdrop-filter: blur(12px);"
@@ -72,7 +116,7 @@ const ogImage = new URL('/og.png', siteUrl).toString();
       erffanhub<span style="color: var(--muted); font-weight: 400;">-00</span>
     </a>
 
-    <nav class="flex gap-6 text-[13.5px]">
+    <nav class="flex gap-6 text-[13.5px]" aria-label="Main">
       <a href="/" class="no-underline transition-colors" aria-current={active === 'about' ? 'page' : undefined}
          style={`color: var(--${active === 'about' ? 'fg' : 'muted'});`}>About</a>
       <a href="/work" class="no-underline transition-colors" aria-current={active === 'work' ? 'page' : undefined}
@@ -92,7 +136,7 @@ const ogImage = new URL('/og.png', siteUrl).toString();
   </div>
 </header>
 
-<main class="flex-1 max-w-[680px] w-full mx-auto px-6 py-16">
+<main id="main" class="flex-1 max-w-[680px] w-full mx-auto px-6 py-16">
   <slot />
 </main>
 
@@ -101,18 +145,16 @@ const ogImage = new URL('/og.png', siteUrl).toString();
     class="max-w-[680px] mx-auto px-6 py-6 flex justify-between items-center flex-wrap gap-4 text-[13px]"
     style="color: var(--muted);"
   >
-    <span>© 2026 erffanhub-00</span>
+    <span>© 2026 {siteName}</span>
     <div class="flex gap-[18px] flex-wrap">
-      <a href="https://github.com/erffanhub-00" target="_blank" rel="noopener"
-         class="no-underline" style="color: var(--muted);">GitHub</a>
-      <a href="https://gist.github.com/erffanhub-00" target="_blank" rel="noopener"
-         class="no-underline" style="color: var(--muted);">Gist</a>
-      <a href="https://x.com/Erffanhub_00" target="_blank" rel="noopener"
-         class="no-underline" style="color: var(--muted);">X</a>
-      <a href="https://t.me/erffan_hub" target="_blank" rel="noopener"
-         class="no-underline" style="color: var(--muted);">Telegram</a>
-      <a href="mailto:erffanhub@gmail.com" class="no-underline" style="color: var(--muted);">Email</a>
-      <a href="/rss.xml" class="no-underline" style="color: var(--muted);">RSS</a>
+      {socialLinks.map((link) => (
+        <a
+          href={link.url}
+          {...(link.url.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
+          class="no-underline"
+          style="color: var(--muted);"
+        >{link.label}</a>
+      ))}
     </div>
   </div>
 </footer>
@@ -133,11 +175,12 @@ const ogImage = new URL('/og.png', siteUrl).toString();
   // === Copy button for code blocks ===
   document.querySelectorAll('.post-body pre').forEach((pre) => {
     const code = pre.querySelector('code');
-    if (!code) return;
+    const parent = pre.parentNode;
+    if (!code || !parent) return;
 
     const wrapper = document.createElement('div');
     wrapper.style.position = 'relative';
-    pre.parentNode.insertBefore(wrapper, pre);
+    parent.insertBefore(wrapper, pre);
     wrapper.appendChild(pre);
 
     const btn = document.createElement('button');

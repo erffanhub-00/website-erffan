@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { socialLinks } from '../data/site';
 ---
 
 <BaseLayout title="Contact" active="contact">
@@ -14,17 +15,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <h2 class="text-xs uppercase tracking-widest mb-5" style="color: var(--muted);">
       Reach me
     </h2>
-    <div class="flex flex-wrap gap-5 text-sm">
-      <a href="mailto:erffanhub@gmail.com" class="no-underline" style="color: var(--muted);">Email</a>
-      <a href="https://github.com/erffanhub-00" target="_blank" rel="noopener"
-         class="no-underline" style="color: var(--muted);">GitHub</a>
-      <a href="https://gist.github.com/erffanhub-00" target="_blank" rel="noopener"
-         class="no-underline" style="color: var(--muted);">Gist</a>
-      <a href="https://x.com/Erffanhub_00" target="_blank" rel="noopener"
-         class="no-underline" style="color: var(--muted);">X</a>
-      <a href="https://t.me/erffan_hub" target="_blank" rel="noopener"
-         class="no-underline" style="color: var(--muted);">Telegram</a>
-      <a href="/rss.xml" class="no-underline" style="color: var(--muted);">RSS</a>
-    </div>
+    <ul class="flex flex-wrap gap-x-5 gap-y-3 text-sm list-none p-0 m-0">
+      {socialLinks.map((link) => (
+        <li>
+          <a
+            href={link.url}
+            {...(link.url.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
+            class="no-underline"
+            style="color: var(--muted);"
+          >{link.label}</a>
+        </li>
+      ))}
+    </ul>
   </section>
 </BaseLayout>

@@ -1,148 +1,110 @@
-# Erffan — Personal Website & Blog
+# website-erffan — Personal Website & Blog
 
-> **Live Website:** [website-erffan.erffanhub.workers.dev](https://website-erffan.erffanhub.workers.dev/)
+Live: [website-erffan.erffanhub.workers.dev](https://website-erffan.erffanhub.workers.dev/)
 
-A minimalist personal website and blog with an **E-paper black & white aesthetic**, built with **Astro 5** and designed around speed, readability, and simplicity.
+A minimalist personal website and blog with an e-paper black-and-white
+aesthetic. English-first, with full Persian (RTL) support for Persian posts.
+Built with Astro 5, styled with Tailwind CSS, deployed as a static site on
+Cloudflare Workers. No database, no server, no tracking.
 
-The site is primarily English-first while supporting **Persian (RTL)** content.
+## Features
 
-## ✦ Features
+- **Blog** — Markdown posts via Astro Content Collections, with categories,
+  tags, search, and filters (all server-rendered, works without JavaScript)
+- **Reading experience** — light/dark theme with no flash on load, Shiki
+  syntax highlighting that follows the theme, copy button on code blocks
+- **Persian support** — per-post `lang`, RTL layout, Vazirmatn font with
+  Tahoma fallback
+- **SEO** — canonical URLs, Open Graph and Twitter Cards, sitemap,
+  `robots.txt`, RSS feed, and JSON-LD structured data
+- **Accessibility** — skip link, visible focus states, reduced-motion support,
+  semantic HTML, labeled form controls
+- **Performance** — fully static output, minimal JavaScript, 680px reading
+  width, system fonts
 
-* Dark / Light theme with localStorage persistence
-* No flash of unstyled theme on page load
-* Client-side search across titles, descriptions, categories, and tags
-* Category filtering
-* Tag filtering with URL support
-* Clickable tags on post pages
-* Code block copy button
-* Syntax highlighting with Shiki
-* RSS feed
-* Custom 404 page
-* RTL support for Persian posts
-* Responsive design
-* SEO meta tags
-* Open Graph and Twitter Cards
-* Minimal E-paper visual style
-* Fully static — no server required
-* Fast loading with minimal JavaScript
+## Tech Stack
 
-## ✦ Tech Stack
+| Technology | Purpose |
+| --- | --- |
+| [Astro 5](https://astro.build/) | Static site framework |
+| [Tailwind CSS 3](https://tailwindcss.com/) | Utility styling |
+| [Shiki](https://shiki.style/) | Syntax highlighting |
+| `@astrojs/rss` | RSS feed |
+| `@astrojs/sitemap` | Sitemap generation |
+| [Cloudflare Workers](https://workers.cloudflare.com/) | Static hosting |
+| Markdown | Blog content |
 
-| Technology                               | Purpose               |
-| ---------------------------------------- | --------------------- |
-| [Astro 5](https://astro.build/)          | Static site framework |
-| [Tailwind CSS](https://tailwindcss.com/) | Styling               |
-| Markdown                                 | Blog content          |
-| Content Collections                      | Content management    |
-| [Shiki](https://shiki.style/)            | Syntax highlighting   |
-| `@astrojs/rss`                           | RSS feed              |
-| Cloudflare Workers                     | Deployment            |
-
-## ✦ Project Structure
+## Project Structure
 
 ```text
 website-erffan/
-├── astro.config.mjs
-├── wrangler.toml
-├── tailwind.config.mjs
+├── astro.config.mjs          # site URL, integrations, Shiki themes
+├── wrangler.toml             # Cloudflare Workers static assets
+├── tailwind.config.mjs       # content paths (colors live in CSS variables)
 ├── package.json
 ├── tsconfig.json
-├── .gitignore
 ├── public/
-│   ├── favicon.svg
-│   ├── og.png
+│   ├── favicon.svg           # "ff" mark
+│   ├── og.png                # social share image (1200x630)
 │   └── robots.txt
 └── src/
-    ├── content.config.ts
-    ├── content/
-    │   └── posts/
-    │       └── *.md
+    ├── content.config.ts     # post schema (title, date, tags, lang, ...)
+    ├── content/posts/        # blog posts, one Markdown file each
+    ├── components/
+    │   └── PostCard.astro    # post card used by Home and Work pages
+    ├── data/
+    │   └── site.ts           # site metadata and social links (single source)
     ├── layouts/
-    │   └── BaseLayout.astro
+    │   └── BaseLayout.astro  # head/meta/SEO, header, footer, theme script
     ├── pages/
-    │   ├── index.astro
-    │   ├── work.astro
+    │   ├── index.astro       # about + latest posts
+    │   ├── work.astro        # post list with search and filters
     │   ├── contact.astro
     │   ├── 404.astro
     │   ├── rss.xml.js
     │   └── posts/
-    │       └── [...slug].astro
-    └── styles/
-        └── global.css
+    │       └── [...slug].astro  # post page (locale date, prev/next)
+    ├── styles/
+    │   └── global.css        # theme variables, article typography, components
+    └── utils/
+        └── format.ts         # shared date formatting
 ```
 
-## ✦ Getting Started
+## Getting Started
 
 ### Requirements
 
-* Node.js 20+
-* npm
-* Git
+- Node.js 20+
+- npm
 
-### Installation
-
-Clone the repository:
+### Install and run
 
 ```bash
 git clone https://github.com/erffanhub-00/website-erffan.git
 cd website-erffan
-```
-
-Install dependencies:
-
-```bash
 npm install
-```
-
-Start the development server:
-
-```bash
 npm run dev
 ```
 
-The website will be available at:
+The site runs at <http://localhost:4321>.
 
-```text
-http://localhost:4321
-```
+### Scripts
 
-### Build
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run check` | Type-check the project (`astro check`) |
+| `npm run astro` | Run the Astro CLI directly |
 
-Create a production build:
+## Adding a Post
 
-```bash
-npm run build
-```
+Create a Markdown file in `src/content/posts/`. The filename becomes the
+URL: `src/content/posts/network-debugging.md` is served at
+`/posts/network-debugging`.
 
-Preview the production build locally:
-
-```bash
-npm run preview
-```
-
-## ✦ Adding a New Post
-
-Create a Markdown file inside:
-
-```text
-src/content/posts/
-```
-
-The filename becomes the post URL.
-
-For example:
-
-```text
-src/content/posts/network-debugging.md
-```
-
-will be available at:
-
-```text
-/posts/network-debugging
-```
-
-Use the following frontmatter:
+Frontmatter:
 
 ```markdown
 ---
@@ -154,56 +116,78 @@ lang: "en"
 description: "A short description of the article."
 readingTime: 5
 ---
-
-Your content here...
 ```
 
-Then write the article using normal Markdown.
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | Post title |
+| `date` | yes | Publication date (`YYYY-MM-DD`) |
+| `category` | yes | Shown on cards and used as a filter |
+| `description` | yes | Used on cards, in meta tags, and in RSS |
+| `tags` | no | Array of strings, `#tag` links on the post page |
+| `lang` | no | `en` (default) or `fa`; `fa` switches the post to RTL with Vazirmatn |
+| `readingTime` | no | Minutes, roughly words / 200 |
+| `image` | no | Hero image URL, shown above the post body |
+| `draft` | no | `true` hides the post from the site, RSS, and sitemap |
 
-## ✦ Deployment
+Write the article in normal Markdown. Code blocks get Shiki highlighting
+and a copy button automatically.
 
-The website is deployed as a static site on **Cloudflare Workers** (see `wrangler.toml`).
+## Theming
 
-### Build settings
+Colors live in CSS variables in `src/styles/global.css` (`--bg`, `--fg`,
+`--muted`, `--line`, `--card`, `--code-bg`, `--accent`), with separate
+values under `[data-theme="dark"]`. The theme toggle in the header stores
+the choice in `localStorage`; without a stored choice the OS preference is
+used. A small inline script in the head applies the theme before first
+paint, so there is no flash.
 
-```text
-Build command: npm run build
-Build output directory: dist
-Node version: 20
-```
+Code highlighting uses Shiki's dual themes (`github-light` /
+`github-dark`) with `defaultColor: false`, so token colors come from
+`--shiki-*` variables and follow the toggle instead of the OS setting.
 
-Deploy from the command line:
+## SEO
+
+- Every page gets a canonical URL, description, Open Graph and Twitter
+  Card tags from `BaseLayout.astro`.
+- Post pages additionally get `og:type=article`, `article:published_time`,
+  `article:tag`, and `BlogPosting` JSON-LD. All pages get `WebSite` JSON-LD.
+- `sitemap-index.xml` and `robots.txt` are generated/served automatically.
+- `/rss.xml` lists all published posts.
+- `public/og.png` is the social share image (1200×630). To replace it,
+  overwrite the file with a new PNG of the same size.
+
+## Deployment
+
+The site is a static build deployed on Cloudflare Workers
+(see `wrangler.toml`, which serves `dist/` as static assets).
+
+From the command line:
 
 ```bash
 npm run build
 npx wrangler deploy
 ```
 
-The project can be configured to automatically deploy whenever changes are pushed to the `main` branch.
+Or connect the repository in the Cloudflare dashboard (Workers & Pages →
+Create → Workers → import the repo) with these build settings:
 
-## ✦ Design Philosophy
+```text
+Build command:   npm run build
+Output directory: dist
+Node version:    20
+```
 
-The website follows a simple E-paper-inspired design:
+Every push to `main` can then deploy automatically, if that is enabled in
+the dashboard.
 
-* Black and white
-* Minimal interface
-* High readability
-* Content-first layout
-* No unnecessary visual elements
-* Comfortable reading width
-* Maximum content width around `680px`
+## License
 
-The goal is to keep the website fast, readable, and focused on the content rather than visual complexity.
+MIT — see [LICENSE](LICENSE).
 
-## ✦ License
+## Me
 
-This project is licensed under the **MIT License**.
-
-You are free to use, modify, and distribute the code according to the terms of the license.
-
-## ✦ Me
-
-[![Telegram](https://img.shields.io/badge/Telegram-erffan__hub-blue?style=for-the-badge\&logo=telegram)](https://t.me/erffan_hub)
-[![Twitter](https://img.shields.io/badge/Twitter-@Erffanhub__00-000000?style=for-the-badge\&logo=x\&logoColor=white)](https://x.com/Erffanhub_00)
-[![Gist](https://img.shields.io/badge/Gist-Profile-000000?style=for-the-badge\&logo=github)](https://gist.github.com/erffanhub-00)
-[![Github](https://img.shields.io/badge/Github-Profile-000000?style=for-the-badge\&logo=github)](https://github.com/erffanhub-00)
+[![Telegram](https://img.shields.io/badge/Telegram-erffan__hub-blue?style=for-the-badge&logo=telegram)](https://t.me/erffan_hub)
+[![X](https://img.shields.io/badge/X-@Erffanhub__00-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/Erffanhub_00)
+[![Gist](https://img.shields.io/badge/Gist-Profile-000000?style=for-the-badge&logo=github)](https://gist.github.com/erffanhub-00)
+[![Github](https://img.shields.io/badge/Github-Profile-000000?style=for-the-badge&logo=github)](https://github.com/erffanhub-00)

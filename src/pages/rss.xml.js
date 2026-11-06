@@ -10,13 +10,14 @@ export async function GET(context) {
     title: 'erffanhub-00',
     description: 'Learner, builder, and in love with breaking things to understand them.',
     site: context.site,
+    // Channel language; per-item <language> is not a valid RSS 2.0 item element.
+    customData: `<language>en-us</language>`,
     items: posts.map((post) => ({
       title: post.data.title,
       pubDate: post.data.date,
       description: post.data.description,
       link: `/posts/${post.id}/`,
       categories: [post.data.category, ...(post.data.tags || [])],
-      customData: `<language>${post.data.lang === 'fa' ? 'fa-ir' : 'en-us'}</language>`,
     })),
   });
 }

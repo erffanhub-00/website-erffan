@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
+import { formatLongDate } from '../../utils/format';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -13,27 +14,39 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
-const formatDate = (date) =>
-  date.toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
+// Previous / next post in date order (newest first).
+const allPosts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const currentIndex = allPosts.findIndex((p) => p.id === post.id);
+const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+const olderPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+
+// Arrows point the reading direction: mirrored on Persian pages.
+const backArrow = post.data.lang === 'fa' ? '→' : '←';
+const prevArrow = post.data.lang === 'fa' ? '→' : '←';
+const nextArrow = post.data.lang === 'fa' ? '←' : '→';
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description} active="work" lang={post.data.lang}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  active="work"
+  lang={post.data.lang}
+  article={{ published: post.data.date, tags: post.data.tags }}
+>
   <a
     href="/work"
     class="inline-flex items-center gap-1.5 text-[13px] no-underline mb-8"
     style="color: var(--muted);"
   >
-    {post.data.lang === 'fa' ? '→' : '←'} Back to Work
+    {backArrow} Back to Work
   </a>
 
   <article dir="auto">
     <header class="mb-10 pb-8 border-b" style="border-color: var(--line);">
       <div class="text-[13px] mb-4" style="color: var(--muted);">
-        {formatDate(post.data.date)} · {post.data.category}
+        {formatLongDate(post.data.date, post.data.lang)} · {post.data.category}
         {post.data.readingTime && ` · ${post.data.readingTime} min read`}
       </div>
       <h1 class="text-[30px] font-bold tracking-tight m-0 mb-4">
@@ -62,5 +75,18 @@ const formatDate = (date) =>
     <div class="post-body">
       <Content />
     </div>
+
+    <nav class="flex justify-between gap-4 mt-14 pt-8 border-t text-sm" style="border-color: var(--line);" aria-label="More posts">
+      {olderPost ? (
+        <a href={`/posts/${olderPost.id}`} class="no-underline" style="color: var(--muted);">
+          {prevArrow} {olderPost.data.title}
+        </a>
+      ) : <span />}
+      {newerPost ? (
+        <a href={`/posts/${newerPost.id}`} class="no-underline text-end" style="color: var(--muted);">
+          {newerPost.data.title} {nextArrow}
+        </a>
+      ) : <span />}
+    </nav>
   </article>
 </BaseLayout>
